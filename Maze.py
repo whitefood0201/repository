@@ -1,16 +1,18 @@
 from random import randint
 
 class Maze:
-    
+    """
+        Using a `2d list` to represent the maze, every number means a block,  
+        which the first bit of the number mean the block can up (1),  
+        the 2 mean can down (2),  
+        the 3 mean can left (4),  
+        the 4 mean can right (8),  
+        and the 5 mean is visited (using for DFS to generate the maze) (16).  
+    """
+
     def __init__(self, height, width):
-        """
-            Using a 2d list to represent the maze, every number means a block,   
-            which the first bit of the number mean the block can up (1),   
-            the 2 mean can down (2),   
-            the 3 mean can left (4),   
-            the 4 mean can right (8),   
-            and the 5 mean is visited (using for DFS to generate the maze) (16).   
-        """
+        if height <= 0 | width <= 0:
+            raise ValueError("size can't be 0 or negative")
         self.height = height
         self.width = width
         # Init the maze, filling with 0
@@ -25,7 +27,6 @@ class Maze:
         xStack:list[int] = []
         yStack:list[int] = []
         
-
         # start on (0, 0)
         xStack.append(0)
         yStack.append(0)
@@ -91,18 +92,20 @@ class Maze:
             jumpableBlock.append((x+1, y))
         return jumpableBlock
     
+    def writeMaze(self):
+        for row in self.maze:
+            for block in row:
+                print("- -" if block & 1 else "---", end="")
+            print("")
+            for block in row:
+                print(" " if block & 4 else "|", end="")
+                print(" ", end="")
+                print(" " if block & 8 else "|", end="")
+            print("")
+            for block in row:
+                print("- -" if block & 2 else "---", end="")
+            print("")
 
 m = Maze(7, 20)
 m.generateMaze()
-for row in m.maze:
-    for block in row:
-        print("- -" if block & 1 else "---", end="")
-    print("")
-    for block in row:
-        print(" " if block & 4 else "|", end="")
-        print(" ", end="")
-        print(" " if block & 8 else "|", end="")
-    print("")
-    for block in row:
-        print("- -" if block & 2 else "---", end="")
-    print("")
+m.writeMaze()
